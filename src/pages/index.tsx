@@ -1,11 +1,12 @@
 import type { NextPage } from "next";
 import Head from "next/head";
+import Board from "../components/Board";
 import { trpc } from "../utils/trpc";
 
 const Home: NextPage = () => {
   const hello = trpc.example.hello.useQuery({ text: "from tRPC" });
   const puzzle = trpc.sudoku.makepuzzle.useQuery();
-  
+
   return (
     <>
       <Head>
@@ -14,8 +15,8 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main className="container mx-auto flex min-h-screen flex-col items-center justify-center p-4">
-        <p>{hello.data?.greeting}</p>
+      <main className="container mx-auto max-w-lg flex flex-col">
+        <Board />
       </main>
     </>
   );
