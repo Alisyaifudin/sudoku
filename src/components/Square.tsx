@@ -38,6 +38,7 @@ function Square({ value, index }: SquareProps) {
       disabled={!!original[index] || end}
       onChange={handleChange}
       onKeyDown={handleKeyDown}
+      type="number"
       value={value || ""}
       className={`aspect-square cursor-default border border-solid border-black text-center text-2xl caret-transparent focus:bg-yellow-300
       ${invalidIndices.includes(index) ? "bg-red-300 text-gray-500" : ""}
