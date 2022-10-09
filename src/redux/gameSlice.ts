@@ -3,6 +3,7 @@ import {
   checkColumn,
   checkRow,
   checkSquare,
+  checkWin,
   getColumnIndices,
   getRowIndices,
   getSquareIndices,
@@ -77,6 +78,7 @@ export const gameSlice = createSlice({
           });
         }
       }
+      if (state.invalid.length === 0) state.end = checkWin(board);
     },
     setBoard: (
       state,

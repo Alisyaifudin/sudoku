@@ -11,6 +11,7 @@ function Square({ value, index }: SquareProps) {
   const dispatch = useAppDispatch();
   const original = useAppSelector((state) => state.game.history[0])!;
   const invalid = useAppSelector((state) => state.game.invalid);
+  const end = useAppSelector((state) => state.game.end);
   const invalidIndices = [
     ...invalid.map((i) => i.columnIndex),
     ...invalid.map((i) => i.rowIndex),
@@ -30,7 +31,7 @@ function Square({ value, index }: SquareProps) {
   };
   return (
     <input
-      disabled={!!original[index]}
+      disabled={!!original[index] || end}
       onChange={handleChange}
       onKeyDown={handleKeyDown}
       value={value || ""}

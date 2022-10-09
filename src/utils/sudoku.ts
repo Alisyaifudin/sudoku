@@ -8,7 +8,7 @@ export const checkRow = (board: BoardState, index: number) => {
     .filter((val) => val !== null);
   // check if there is duplicate
   const set = new Set(rowList);
-  return set.size === rowList.length
+  return set.size === rowList.length;
 };
 
 export const checkColumn = (board: BoardState, index: number) => {
@@ -17,7 +17,7 @@ export const checkColumn = (board: BoardState, index: number) => {
   const columnList = board.filter((val, i) => i % 9 === column && val !== null);
   // check if there is duplicate
   const set = new Set(columnList);
-  return set.size === columnList.length
+  return set.size === columnList.length;
 };
 
 export const checkSquare = (board: BoardState, index: number) => {
@@ -30,25 +30,29 @@ export const checkSquare = (board: BoardState, index: number) => {
   );
   // check if there is duplicate
   const set = new Set(squareList);
-  return set.size === squareList.length
+  return set.size === squareList.length;
 };
 // array of 0..81
-const universal = Array.from(Array(81).keys()); 
+const universal = Array.from(Array(81).keys());
 
 export const getRowIndices = (index: number) => {
   const row = Math.floor(index / 9);
   return universal.filter((val) => Math.floor(val / 9) === row);
-}
+};
 
 export const getColumnIndices = (index: number) => {
   const column = index % 9;
   return universal.filter((val) => val % 9 === column);
-}
+};
 
 export const getSquareIndices = (index: number) => {
   const square = Math.floor(index / 27) * 3 + Math.floor((index % 9) / 3);
   return universal.filter(
-    (val) =>
-      Math.floor(val / 27) * 3 + Math.floor((val % 9) / 3) === square
+    (val) => Math.floor(val / 27) * 3 + Math.floor((val % 9) / 3) === square
   );
-}
+};
+
+export const checkWin = (board: BoardState) => {
+  const noNull = board.filter((val): val is number => val !== null);
+  return noNull.length === 81;
+};

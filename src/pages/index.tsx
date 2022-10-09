@@ -9,13 +9,14 @@ import { trpc } from "../utils/trpc";
 const Home: NextPage = () => {
   const dispatch = useAppDispatch();
   const board = useAppSelector((state) => state.game.history);
+  
   trpc.sudoku.makepuzzle.useQuery(undefined, {
     onSuccess: (data) => {
       if (board.length !== 0) return;
-      console.log(data);
       dispatch(setBoard({ board: data, pointer: 0 }));
     },
   });
+  
   if (board.length === 0)
     return (
       <div className="mx-auto flex min-h-screen w-full items-center justify-center">
