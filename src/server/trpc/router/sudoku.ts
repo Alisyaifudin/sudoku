@@ -5,7 +5,8 @@ import sudoku from "sudoku";
 
 export const sudokuRouter = t.router({
   makepuzzle: t.procedure.query(() => {
-    const board = sudoku.makepuzzle();
+    let board = sudoku.makepuzzle();
+    board = board.map(val=> val !== null ? val+1 : null);
     return board;
   }),
 });

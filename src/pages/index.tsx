@@ -2,19 +2,21 @@ import type { NextPage } from "next";
 import Head from "next/head";
 import Board from "../components/Board";
 import Title from "../components/Title";
-import { useAppDispatch } from "../redux/app/hooks";
+import { useAppDispatch, useAppSelector } from "../redux/app/hooks";
 import { setBoard } from "../redux/gameSlice";
 import { trpc } from "../utils/trpc";
 
 const Home: NextPage = () => {
   const dispatch = useAppDispatch();
-  const hello = trpc.example.hello.useQuery({ text: "from tRPC" });
-  const { isLoading } = trpc.sudoku.makepuzzle.useQuery(undefined, {
+  const board = useAppSelector((state) => state.game.history);
+  trpc.sudoku.makepuzzle.useQuery(undefined, {
     onSuccess: (data) => {
+      if (board.length !== 0) return;
+      console.log(data);
       dispatch(setBoard({ board: data, pointer: 0 }));
     },
   });
-  if (isLoading)
+  if (board.length === 0)
     return (
       <div className="mx-auto flex min-h-screen w-full items-center justify-center">
         <p>Loading...</p>

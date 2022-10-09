@@ -1,5 +1,12 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-
+import {
+  checkColumn,
+  checkRow,
+  checkSquare,
+  getColumnIndices,
+  getRowIndices,
+  getSquareIndices,
+} from "../utils/sudoku";
 export type BoardState = (number | null)[];
 
 export interface GameState {
@@ -8,11 +15,11 @@ export interface GameState {
   pointer: number;
   index: number | null;
   invalid: {
-    row: number[];
-    column: number[];
-    square: number[];
-    index: number[];
-  };
+    index: number;
+    rowIndex: number[];
+    columnIndex: number[];
+    squareIndex: number[];
+  }[];
 }
 
 const initialState: GameState = {
@@ -20,21 +27,13 @@ const initialState: GameState = {
   history: [],
   end: false,
   pointer: 0,
-  invalid: {
-    row: [],
-    column: [],
-    square: [],
-    index: [],
-  },
+  invalid: [],
 };
 
 export const gameSlice = createSlice({
   name: "game",
   initialState,
   reducers: {
-    setIndex: (state, action: PayloadAction<number | null>) => {
-      state.index = action.payload;
-    },
     setValue: (
       state,
       action: PayloadAction<{ index: number; value: number | null }>
@@ -47,6 +46,37 @@ export const gameSlice = createSlice({
       }
       state.history.push(board);
       state.pointer++;
+      const consideredIndices = [
+        ...state.invalid.map((val) => val.index),
+        index,
+      ];
+      for (const index of consideredIndices) {
+        const validRow = checkRow(board, index);
+        const validColumn = checkColumn(board, index);
+        const validSquare = checkSquare(board, index);
+        const invalidIndex = state.invalid.findIndex(
+          (item) => item.index === index
+        );
+        if (invalidIndex !== -1) {
+          if (validRow && validColumn && validSquare)
+            state.invalid.splice(invalidIndex, 1);
+          else {
+            state.invalid[invalidIndex] = {
+              index,
+              rowIndex: !validRow ? getRowIndices(index) : [],
+              columnIndex: !validColumn ? getColumnIndices(index) : [],
+              squareIndex: !validSquare ? getSquareIndices(index) : [],
+            };
+          }
+        } else if (!validRow || !validColumn || !validSquare) {
+          state.invalid.push({
+            index,
+            rowIndex: !validRow ? getRowIndices(index) : [],
+            columnIndex: !validColumn ? getColumnIndices(index) : [],
+            squareIndex: !validSquare ? getSquareIndices(index) : [],
+          });
+        }
+      }
     },
     setBoard: (
       state,
@@ -58,6 +88,6 @@ export const gameSlice = createSlice({
   },
 });
 
-export const { setIndex, setValue, setBoard } = gameSlice.actions;
+export const { setValue, setBoard } = gameSlice.actions;
 
 export default gameSlice.reducer;
