@@ -1,6 +1,4 @@
-import React, { useRef } from "react";
-import useClickOutside from "../hooks/useClickOutside";
-import { useAppDispatch, useAppSelector } from "../redux/app/hooks";
+import { useAppSelector } from "../redux/app/hooks";
 import { BoardState } from "../redux/gameSlice";
 import Square from "./Square";
 
@@ -11,7 +9,8 @@ function Board() {
   const history = useAppSelector((state) => state.game.history);
   const board =
     history.length && history.length >= pointer
-      ? history[pointer]!
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      ? history[pointer]!.state
       : emptyBoard;
   return (
     <div className="mx-auto grid w-full grid-cols-9">

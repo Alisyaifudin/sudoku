@@ -1,6 +1,8 @@
 import type { NextPage } from "next";
 import Head from "next/head";
+import { useEffect } from "react";
 import Board from "../components/Board";
+import ControlPanel from "../components/ControlPanel";
 import Title from "../components/Title";
 import { useAppDispatch, useAppSelector } from "../redux/app/hooks";
 import { setBoard } from "../redux/gameSlice";
@@ -8,15 +10,19 @@ import { trpc } from "../utils/trpc";
 
 const Home: NextPage = () => {
   const dispatch = useAppDispatch();
+  const utils = trpc.useContext();
   const board = useAppSelector((state) => state.game.history);
-  
+  const boardLength = board.length;
   trpc.sudoku.makepuzzle.useQuery(undefined, {
     onSuccess: (data) => {
-      if (board.length !== 0) return;
+      if (boardLength !== 0) return;
       dispatch(setBoard({ board: data, pointer: 0 }));
     },
   });
-  
+  useEffect(() => {
+    if (boardLength !== 0) return;
+    utils.invalidate();
+  }, [boardLength, utils]);
   if (board.length === 0)
     return (
       <div className="mx-auto flex min-h-screen w-full items-center justify-center">
@@ -31,9 +37,10 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main className="container mx-auto flex max-w-lg flex-col justify-center gap-2 px-1">
+      <main className="container mx-auto flex max-w-lg flex-col items-center justify-center gap-2 px-1">
         <Title />
         <Board />
+        <ControlPanel />
       </main>
     </>
   );

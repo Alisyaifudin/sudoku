@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import React from "react";
 import { useAppDispatch, useAppSelector } from "../redux/app/hooks";
 import { setValue } from "../redux/gameSlice";
@@ -9,8 +10,11 @@ interface SquareProps {
 
 function Square({ value, index }: SquareProps) {
   const dispatch = useAppDispatch();
-  const original = useAppSelector((state) => state.game.history[0])!;
-  const invalid = useAppSelector((state) => state.game.invalid);
+  const pointer = useAppSelector((state) => state.game.pointer);
+  const history = useAppSelector((state) => state.game.history);
+  const original = history[0]!.state;
+
+  const invalid = pointer < history.length ? history[pointer]!.invalid : [];
   const end = useAppSelector((state) => state.game.end);
   const invalidIndices = [
     ...invalid.map((i) => i.columnIndex),
