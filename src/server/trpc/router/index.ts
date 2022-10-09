@@ -2,9 +2,11 @@
 import { t } from "../trpc";
 
 import { exampleRouter } from "./example";
+import { sudokuRouter } from "./sudoku";
 
 export const appRouter = t.router({
   example: exampleRouter,
+  sudoku: sudokuRouter,
 });
 
 // export type definition of API

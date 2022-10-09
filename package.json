@@ -9,6 +9,7 @@
     "start": "next start"
   },
   "dependencies": {
+    "@next/bundle-analyzer": "^12.3.1",
     "@tanstack/react-query": "^4.10.0",
     "@trpc/client": "10.0.0-proxy-beta.15",
     "@trpc/next": "10.0.0-proxy-beta.15",
@@ -17,6 +18,7 @@
     "next": "12.3.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",
+    "sudoku": "^0.0.3",
     "superjson": "1.9.1",
     "zod": "^3.18.0"
   },
